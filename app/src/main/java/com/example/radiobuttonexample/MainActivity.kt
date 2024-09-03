@@ -89,7 +89,7 @@ fun RadioButtonGroup(
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun RadioButtonGroupPreview() {
     RadioButtonExampleTheme {
         RadioButtonGroup(radioOptions = listOf("Calls", "Missed", "Friends"))
     }
