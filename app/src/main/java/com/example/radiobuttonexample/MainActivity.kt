@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.MaterialTheme
@@ -35,19 +37,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             RadioButtonExampleTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        var selectedOption by remember { mutableStateOf("Calls") }
-                        RadioButtonGroup(
-                            radioOptions = listOf("Calls", "Missed", "Friends"),
-                            selectedOption = selectedOption
-                        ) {
-                            selectedOption = it
-                        }
-                        Text(text = "Selected option: $selectedOption")
-                    }
+                    MainContent(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MainContent(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(16.dp)
+    ) {
+        var selectedOptionName by remember { mutableStateOf("Calls") }
+        RadioButtonGroup(
+            radioOptions = listOf("Calls", "Missed", "Friends"),
+            selectedOption = selectedOptionName,
+            onOptionSelected = { selectedOptionName = it }
+        )
+        Text(text = "Selected option: $selectedOptionName")
     }
 }
 
@@ -55,16 +63,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RadioButtonGroup(
     radioOptions: List<String>,
-    selectedOption: String = radioOptions[0],
-    onOptionSelected: (String) -> Unit = {}
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    selectedOption: String = radioOptions[0]
 ) {
 // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
-    Column(Modifier.selectableGroup()) {
+    Column(modifier = modifier.selectableGroup()) {
         radioOptions.forEach { text ->
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(48.dp)
                     .selectable(
                         selected = (text == selectedOption),
                         onClick = { onOptionSelected(text) },
@@ -77,6 +86,7 @@ fun RadioButtonGroup(
                     selected = (text == selectedOption),
                     onClick = null // null recommended for accessibility with screenreaders
                 )
+                Spacer(Modifier.width(16.dp))
                 Text(
                     text = text,
                     style = MaterialTheme.typography.bodyLarge,
@@ -91,6 +101,9 @@ fun RadioButtonGroup(
 @Composable
 fun RadioButtonGroupPreview() {
     RadioButtonExampleTheme {
-        RadioButtonGroup(radioOptions = listOf("Calls", "Missed", "Friends"))
+        RadioButtonGroup(
+            radioOptions = listOf("Calls", "Missed", "Friends"),
+            selectedOption = "Calls",
+            onOptionSelected = {})
     }
 }
