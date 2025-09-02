@@ -86,7 +86,7 @@ fun RadioButtonGroup(
                     selected = (text == selectedOption),
                     onClick = null // null recommended for accessibility with screenreaders
                 )
-                Spacer(Modifier.width(16.dp))
+                Spacer(Modifier.width(8.dp))
                 Text(
                     text = text,
                     style = MaterialTheme.typography.bodyLarge,
